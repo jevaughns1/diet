@@ -1,1 +1,45 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+  <h1>Dashboard</h1>
+  <section>
+    <h2>User Info</h2>
+    <!-- Display user details here -->
+    <div>
+      <form (ngSubmit)="fetchUser()" novalidate>
+        <label>User ID:</label>
+        <input type="text" [(ngModel)]="userId" name="userId" placeholder="Enter your user ID" />
+        <button type="submit">Load User</button>
+      </form>
+    </div>
+    <div *ngIf="user">
+      <p><strong>Name:</strong> {{ user.userName }}</p>
+      <p><strong>Diet Type:</strong> {{ user.dietType }}</p>
+      <!-- Add more user fields as needed -->
+    </div>
+  </section>
+
+  <section>
+    <h2>Daily Status</h2>
+    <button (click)="fetchDailyStatus()">Refresh Status</button>
+    <div *ngIf="dailyStatus">
+      <p><strong>Protein:</strong> {{ dailyStatus.protein }}</p>
+      <p><strong>Carbs:</strong> {{ dailyStatus.carbs }}</p>
+      <p><strong>Fat:</strong> {{ dailyStatus.fat }}</p>
+      <p><strong>Calories:</strong> {{ dailyStatus.calories }}</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Meal Logs</h2>
+    <button (click)="fetchMealLogs()">Show Meal Logs</button>
+    <div *ngIf="mealLogs && mealLogs.length">
+      <ul>
+        <li *ngFor="let log of mealLogs">
+          <strong>{{ log.date | date: 'shortDate' }}</strong>
+          <ul>
+            <li *ngFor="let item of log.foodItems">{{ item.name }} - {{ item.calories }} cal</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>

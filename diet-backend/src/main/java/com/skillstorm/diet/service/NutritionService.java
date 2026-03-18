@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.skillstorm.diet.model.FoodItem;
 import com.skillstorm.diet.model.User;
 
+@Service
 public class NutritionService {
 
     public Map<String, Double> calculateMacros(List<FoodItem> foodItems) {

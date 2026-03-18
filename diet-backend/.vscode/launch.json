@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-DietApplication<diet>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.skillstorm.diet.DietApplication",
+      "projectName": "diet",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

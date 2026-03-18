@@ -1,0 +1,14 @@
+{
+  "/users": {
+    "target": "http://localhost:8080/api",
+    "secure": false
+  },
+  "/status-bar": {
+    "target": "http://localhost:8080/api",
+    "secure": false
+  },
+  "/daily-log": {
+    "target": "http://localhost:8080/api",
+    "secure": false
+  }
+}
