@@ -1,3 +1,26 @@
+.goals-card,
+.progress-card,
+.meal-logs-card,
+.tips-card {
+  background: #f3f4f6;
+  border-left: 4px solid #4f46e5;
+  margin-bottom: 1.5rem;
+}
+
+.goals-card p,
+.progress-card p {
+  margin: 0.3rem 0;
+  font-size: 1.1rem;
+}
+
+.tips-card ul {
+  padding-left: 1.2rem;
+}
+.tips-card li {
+  margin-bottom: 0.4rem;
+  color: #4f46e5;
+  font-weight: 500;
+}
 // Dashboard page styles
 .dashboard {
   max-width: 800px;
@@ -6,6 +29,7 @@
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  margin-top: 90px; /* Add space for fixed header */
 }
 
 .dashboard h1 {

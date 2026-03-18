@@ -1,45 +1,94 @@
-<div class="dashboard">
-  <h1>Dashboard</h1>
-  <section>
-    <h2>User Info</h2>
-    <!-- Display user details here -->
-    <div>
-      <form (ngSubmit)="fetchUser()" novalidate>
-        <label>User ID:</label>
-        <input type="text" [(ngModel)]="userId" name="userId" placeholder="Enter your user ID" />
-        <button type="submit">Load User</button>
-      </form>
-    </div>
-    <div *ngIf="user">
-      <p><strong>Name:</strong> {{ user.userName }}</p>
-      <p><strong>Diet Type:</strong> {{ user.dietType }}</p>
-      <!-- Add more user fields as needed -->
-    </div>
-  </section>
+<app-header></app-header>
 
-  <section>
-    <h2>Daily Status</h2>
-    <button (click)="fetchDailyStatus()">Refresh Status</button>
-    <div *ngIf="dailyStatus">
-      <p><strong>Protein:</strong> {{ dailyStatus.protein }}</p>
-      <p><strong>Carbs:</strong> {{ dailyStatus.carbs }}</p>
-      <p><strong>Fat:</strong> {{ dailyStatus.fat }}</p>
-      <p><strong>Calories:</strong> {{ dailyStatus.calories }}</p>
-    </div>
-  </section>
+<div style="display: flex; min-height: 100dvh">
+  <app-sidebar></app-sidebar>
+  <div style="flex: 1">
+    <div class="dashboard">
+      <h1>Dashboard</h1>
+      <section>
+        <h2>User Info</h2>
+        <div class="card">
+          <form (ngSubmit)="fetchUser()" novalidate>
+            <label>User ID:</label>
+            <input
+              type="text"
+              [(ngModel)]="userId"
+              name="userId"
+              placeholder="Enter your user ID"
+            />
+            <button type="submit">Load User</button>
+          </form>
+          <div *ngIf="user">
+            <p><strong>Name:</strong> {{ user.userName }}</p>
+            <p><strong>Diet Type:</strong> {{ user.dietType }}</p>
+          </div>
+        </div>
+      </section>
+      <section>
+        <app-meal-timeline [meals]="mealLogs"> </app-meal-timeline>
+      </section>
 
-  <section>
-    <h2>Meal Logs</h2>
-    <button (click)="fetchMealLogs()">Show Meal Logs</button>
-    <div *ngIf="mealLogs && mealLogs.length">
-      <ul>
-        <li *ngFor="let log of mealLogs">
-          <strong>{{ log.date | date: 'shortDate' }}</strong>
+      <section>
+        <h2>Goals</h2>
+        <div class="card goals-card">
+          <div *ngIf="user">
+            <p><strong>Protein Target:</strong> {{ user.proteinTarget }} g</p>
+            <p><strong>Carb Target:</strong> {{ user.carbTarget }} g</p>
+            <p><strong>Fat Target:</strong> {{ user.fatTarget }} g</p>
+            <p><strong>Calorie Target:</strong> {{ user.calorieTarget }} kcal</p>
+          </div>
+          <div *ngIf="!user">
+            <p>Enter your User ID to see your goals.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Progress</h2>
+        <div class="card progress-card">
+          <button (click)="fetchDailyStatus()">Refresh Status</button>
+          <div *ngIf="dailyStatus">
+            <p><strong>Protein:</strong> {{ dailyStatus.protein }} g</p>
+            <p><strong>Carbs:</strong> {{ dailyStatus.carbs }} g</p>
+            <p><strong>Fat:</strong> {{ dailyStatus.fat }} g</p>
+            <p><strong>Calories:</strong> {{ dailyStatus.calories }} kcal</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Meal Logs</h2>
+        <div class="card meal-logs-card">
+          <button (click)="fetchMealLogs()">Show Meal Logs</button>
+          <div *ngIf="mealLogs && mealLogs.length">
+            <ul>
+              <li *ngFor="let log of mealLogs">
+                <strong>{{ log.date | date: 'shortDate' }}</strong>
+                <ul>
+                  <li *ngFor="let item of log.foodItems">
+                    {{ item.name }} - {{ item.calories }} cal
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div *ngIf="mealLogs && !mealLogs.length">
+            <p>No meal logs found for this user.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Tips</h2>
+        <div class="card tips-card">
           <ul>
-            <li *ngFor="let item of log.foodItems">{{ item.name }} - {{ item.calories }} cal</li>
+            <li>Stay hydrated throughout the day.</li>
+            <li>Eat a variety of foods for balanced nutrition.</li>
+            <li>Track your meals to stay on target.</li>
+            <li>Get regular exercise for best results.</li>
           </ul>
-        </li>
-      </ul>
+        </div>
+      </section>
     </div>
-  </section>
+  </div>
 </div>
