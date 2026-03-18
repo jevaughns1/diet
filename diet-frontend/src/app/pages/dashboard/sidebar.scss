@@ -1,0 +1,90 @@
+.sidebar {
+  width: 16rem;
+  background: #fff;
+  border-right: 1px solid #e5e7eb;
+  padding: 1.5rem 1rem;
+  min-height: 100vh;
+}
+.space-y-1 > * + * {
+  margin-top: 0.25rem;
+}
+button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  background: none;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+.bg-gradient-to-r {
+  background: linear-gradient(90deg, #34d399 0%, #10b981 100%);
+}
+.text-white {
+  color: #fff;
+}
+.shadow-md {
+  box-shadow: 0 4px 16px rgba(52, 211, 153, 0.15);
+}
+.text-gray-600 {
+  color: #4b5563;
+}
+.hover\:bg-gray-50:hover {
+  background: #f9fafb;
+}
+.icon {
+  font-size: 1.25rem;
+}
+.lucide-home::before {
+  content: '\1F3E0';
+}
+.lucide-apple::before {
+  content: '\1F34E';
+}
+.lucide-target::before {
+  content: '\1F3AF';
+}
+.lucide-trending-up::before {
+  content: '\1F4C8';
+}
+.lucide-calendar::before {
+  content: '\1F4C5';
+}
+.lucide-award::before {
+  content: '\1F3C6';
+}
+.mt-8 {
+  margin-top: 2rem;
+}
+.bg-gradient-to-br {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+}
+.border-orange-200 {
+  border: 1px solid #fed7aa;
+}
+.rounded-xl {
+  border-radius: 1rem;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.text-gray-800 {
+  color: #1f2937;
+}
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+.text-sm {
+  font-size: 0.875rem;
+}
+.text-gray-700 {
+  color: #374151;
+}
