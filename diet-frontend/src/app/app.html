@@ -75,4 +75,34 @@
   }
 </style>
 
+<nav
+  style="
+    padding: 1rem;
+    background-color: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  "
+>
+  <a
+    routerLink="/dashboard"
+    routerLinkActive="active-link"
+    style="text-decoration: none; color: inherit"
+    >Dashboard</a
+  >
+  <a
+    routerLink="/signup"
+    routerLinkActive="active-link"
+    style="text-decoration: none; color: inherit"
+    >Sign Up</a
+  >
+  <a
+    routerLink="/signin"
+    routerLinkActive="active-link"
+    style="text-decoration: none; color: inherit"
+    >Sign In</a
+  >
+</nav>
+
 <router-outlet />

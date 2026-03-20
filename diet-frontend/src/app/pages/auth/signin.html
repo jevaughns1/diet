@@ -1,0 +1,24 @@
+<div class="auth-card">
+  <h2 class="auth-title">Sign In</h2>
+  <form (ngSubmit)="signin()" novalidate>
+    <label style="display: block">Email</label>
+    <input
+      type="email"
+      [(ngModel)]="credentials.email"
+      name="email"
+      required
+      placeholder="Enter your email"
+    />
+    <label style="display: block">Password</label>
+    <input
+      type="password"
+      [(ngModel)]="credentials.password"
+      name="password"
+      required
+      placeholder="Enter your password"
+    />
+    <button type="submit">Sign In</button>
+  </form>
+  <div *ngIf="error" class="auth-error">{{ error }}</div>
+  <div *ngIf="success" class="auth-success">{{ success }}</div>
+</div>

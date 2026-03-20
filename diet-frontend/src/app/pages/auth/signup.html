@@ -1,0 +1,39 @@
+<div class="auth-card">
+  <h2 class="auth-title">Sign Up</h2>
+  <form (ngSubmit)="signup()" novalidate>
+    <label>User Name</label>
+    <input
+      type="text"
+      [(ngModel)]="user.userName"
+      name="userName"
+      required
+      placeholder="Enter your username"
+    />
+    <label>Email</label>
+    <input
+      type="email"
+      [(ngModel)]="user.email"
+      name="email"
+      required
+      placeholder="Enter your email"
+    />
+    <label>Password</label>
+    <input
+      type="password"
+      [(ngModel)]="user.password"
+      name="password"
+      required
+      placeholder="Enter your password"
+    />
+    <label>Diet Type</label>
+    <input
+      type="text"
+      [(ngModel)]="user.dietType"
+      name="dietType"
+      placeholder="Diet type (optional)"
+    />
+    <button type="submit">Create Account</button>
+  </form>
+  <div *ngIf="error" class="auth-error">{{ error }}</div>
+  <div *ngIf="success" class="auth-success">{{ success }}</div>
+</div>

@@ -23,4 +23,11 @@ export class SidebarComponent {
     { icon: 'lucide-calendar', label: 'Calendar', active: false },
     { icon: 'lucide-award', label: 'Achievements', active: false },
   ];
+
+  setActive(label: string) {
+    this.navItems = this.navItems.map((item) => ({
+      ...item,
+      active: item.label === label ? true : false,
+    }));
+  }
 }
