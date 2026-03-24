@@ -19,6 +19,15 @@ import com.skillstorm.diet.service.UserService;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        boolean success = userService.login(loginRequest.getUserName(), loginRequest.getPassword());
+        if (!success) {
+            return ResponseEntity.status(401).body("Invalid username or password");
+        }
+        return ResponseEntity.ok("Login successful");
+    }
+
     private final UserService userService;
 
     public UserController(UserService userService) {

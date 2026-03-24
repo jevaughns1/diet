@@ -1,67 +1,124 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CalorieCardComponent } from './calorie.component';
 import { HeaderComponent } from './header';
-import { SidebarComponent } from './sidebar';
+import { LogMealFormComponent } from './log.component';
 import { MealTimelineComponent } from './meal-timeline';
+import { ProteinGaugeComponent } from './protein.component';
+import { SidebarComponent } from './sidebar';
 
 @Component({
   selector: 'app-dashboard',
-  templateUrl: './dashboard.html',
-  styleUrls: ['./dashboard.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-    DatePipe,
+
     HeaderComponent,
     SidebarComponent,
     MealTimelineComponent,
+    CalorieCardComponent,
+    ProteinGaugeComponent,
+    LogMealFormComponent,
   ],
+  template: `
+    <div class="flex min-h-screen bg-gray-50">
+      <app-sidebar
+        class="hidden lg:block w-64 fixed h-full border-r border-gray-200 bg-white z-20"
+      ></app-sidebar>
+
+      <main class="flex-1 lg:ml-64 flex flex-col">
+        <app-header [user]="user" (toggleSidebar)="(true)"></app-header>
+
+        <div class="p-6 lg:p-10 max-w-7xl mx-auto w-full space-y-8">
+          <button (click)="refreshAllData()">refresh</button>
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <app-calorie-card [status]="dailyStatus"></app-calorie-card>
+            <app-protein-gauge
+              [current]="dailyStatus?.proteinConsumed || 0"
+              [goal]="dailyStatus?.proteinGoal || 150"
+            ></app-protein-gauge>
+          </div>
+
+          <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div class="xl:col-span-2">
+              <app-meal-timeline [meals]="mealLogs" (addClick)="showLogMealForm = true">
+              </app-meal-timeline>
+            </div>
+
+            <div class="space-y-6">
+              <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                <h3 class="font-bold text-gray-800 mb-4">Daily Insight</h3>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  You are 20g away from your protein goal for today. Consider adding a Greek yogurt
+                  to your next snack!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <app-log-meal-form
+        *ngIf="showLogMealForm"
+        [userId]="userId"
+        (close)="showLogMealForm = false"
+        (submitted)="onMealLogged($event)"
+      >
+      </app-log-meal-form>
+    </div>
+  `,
 })
-export class DashboardComponent {
-  userId: string = '';
+export class DashboardComponent implements OnInit {
+  userId: string = '158f53e0-e842-4eea-891c-1fca91fae2e1'; // Replace with real Auth logic
   user: any = null;
   dailyStatus: any = null;
   mealLogs: any[] = [];
+  showLogMealForm = false;
 
   constructor(private http: HttpClient) {}
 
+  ngOnInit() {
+    this.refreshAllData();
+  }
+
+  refreshAllData() {
+    this.fetchUser();
+    this.fetchDailyStatus();
+    this.fetchMealLogs();
+  }
+
   fetchUser() {
-    if (!this.userId) return;
-    this.http.get(`/users/${this.userId}`).subscribe({
-      next: (data: any) => (this.user = data),
-      error: () => (this.user = null),
-    });
+    this.http.get(`/users/${this.userId}`).subscribe((data) => (this.user = data));
   }
 
   fetchDailyStatus() {
     if (!this.userId) return;
-    this.http.get(`/status-bar/daily?userId=${this.userId}`).subscribe({
+    this.http.get(`/api/status-bar/daily?userId=${this.userId}`).subscribe({
       next: (data: any) => (this.dailyStatus = data),
-      error: () => (this.dailyStatus = null),
+      error: (err) => {
+        console.error('API Error:', err);
+        // Set default values so the Gauge components don't crash
+        this.dailyStatus = {
+          caloriesConsumed: 0,
+          calorieGoal: 2000,
+          proteinConsumed: 0,
+          proteinGoal: 150,
+        };
+      },
     });
   }
 
   fetchMealLogs() {
-    if (!this.userId) return;
-    this.http.get(`/daily-log/user-logs?userId=${this.userId}`).subscribe(
-      (data: any) => {
-        this.mealLogs = Array.isArray(data)
-          ? data.map((log) => ({
-              id: log.id || log._id || log.date,
-              time: log.time || this.formatTime(log.date),
-              mealType: log.mealType || 'Meal',
-              items: log.foodItems ? log.foodItems.map((item: any) => item.name) : [],
-              tags: log.tags || [],
-            }))
-          : [];
-      },
-      () => (this.mealLogs = []),
-    );
+    this.http.get(`/daily-log/user-logs?userId=${this.userId}`).subscribe((data: any) => {
+      this.mealLogs = data || [];
+    });
   }
 
-  formatTime(date: string) {
-    return new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  onMealLogged(res: any) {
+    this.showLogMealForm = false;
+    this.refreshAllData(); // Live update UI
   }
 }

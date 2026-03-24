@@ -11,10 +11,24 @@ import com.skillstorm.diet.repository.UserRepo;
 
 @Service
 public class UserService {
+
     private final UserRepo userRepo;
 
     public UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
+    }
+
+    public boolean login(String userName, String password) {
+        User user = findByUserName(userName);
+        if (user == null) {
+            return false;
+        }
+        // In production, use hashed passwords
+        return user.getPassword().equals(password);
+    }
+
+    public User findByUserName(String userName) {
+        return userRepo.findByUserName(userName).orElse(null);
     }
 
     public User createUser(User user) {

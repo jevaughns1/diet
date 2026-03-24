@@ -1,47 +1,55 @@
-<div class="meal-timeline bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-  <h3 class="text-lg font-semibold text-gray-800 mb-6">Today's Meals</h3>
-  <div class="space-y-4">
-    <div *ngFor="let meal of meals; let i = index" class="relative">
-      <!-- Timeline connector -->
+<div class="meal-timeline bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full">
+  <div class="flex items-center justify-between mb-8">
+    <h3 class="text-xl font-bold text-gray-800 tracking-tight">Today's Meals</h3>
+    <span class="text-xs font-bold text-mint-600 bg-mint-50 px-3 py-1 rounded-full uppercase">
+      {{ meals?.length || 0 }} Entries
+    </span>
+  </div>
+
+  <div class="space-y-6 relative">
+    <div
+      *ngIf="meals && meals.length > 1"
+      class="absolute left-5 top-5 bottom-5 w-0.5 bg-gray-100 z-0"
+    ></div>
+
+    <div *ngFor="let meal of meals; let i = index; let last = last" class="relative z-10">
       <div
-        *ngIf="i < meals.length - 1"
-        class="absolute left-5 top-16 bottom-0 w-0.5 bg-gray-200 -mb-4"
-      ></div>
-      <!-- Meal card -->
-      <div class="bg-gray-50 rounded-xl p-5 hover:bg-gray-100 transition-colors cursor-pointer">
-        <div class="flex items-start gap-4">
-          <!-- Icon -->
-          <div
-            class="w-10 h-10 rounded-full bg-mint-500 flex items-center justify-center flex-shrink-0 relative z-10"
-          >
-            <span class="lucide-utensils w-5 h-5 text-white"></span>
+        class="group flex items-start gap-5 p-4 rounded-2xl hover:bg-gray-50 transition-all duration-300 border border-transparent hover:border-gray-100"
+      >
+        <div
+          class="w-10 h-10 rounded-xl bg-mint-500 text-white flex items-center justify-center shadow-lg shadow-mint-100 flex-shrink-0"
+        >
+          <lucide-icon [name]="UtensilsIcon" class="w-5 h-5"></lucide-icon>
+        </div>
+
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between mb-1">
+            <h4 class="font-bold text-gray-800 text-base truncate">{{ meal.mealType }}</h4>
+            <div class="flex items-center gap-1.5 text-xs font-medium text-gray-400">
+              <lucide-icon [name]="ClockIcon" class="w-3.5 h-3.5"></lucide-icon>
+              <span>{{ meal.time }}</span>
+            </div>
           </div>
-          <!-- Content -->
-          <div class="flex-1">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="font-semibold text-gray-800 text-base">{{ meal.mealType }}</h4>
-              <div class="flex items-center gap-1.5 text-sm text-gray-500">
-                <span class="lucide-clock w-4 h-4"></span>
-                <span>{{ meal.time }}</span>
-              </div>
-            </div>
-            <!-- Food items -->
-            <div class="text-sm text-gray-600 mb-3">
-              {{ meal.items.join(', ') }}
-            </div>
-            <!-- Tags -->
-            <div class="flex gap-2">
-              <span
-                *ngFor="let tag of meal.tags"
-                class="text-xs px-3 py-1.5 rounded-lg font-medium"
-                [ngClass]="tag.color"
-              >
-                {{ tag.text }}
-              </span>
-            </div>
+
+          <p class="text-sm text-gray-500 mb-4 leading-relaxed">
+            {{ meal.items?.join(', ') || 'No items listed' }}
+          </p>
+
+          <div class="flex flex-wrap gap-2">
+            <span
+              *ngFor="let tag of meal.tags"
+              class="text-[10px] px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider border transition-colors"
+              [ngClass]="tag.color || 'bg-gray-100 text-gray-500 border-gray-200'"
+            >
+              {{ tag.text }}
+            </span>
           </div>
         </div>
       </div>
+    </div>
+
+    <div *ngIf="!meals || meals.length === 0" class="py-10 text-center">
+      <p class="text-gray-400 text-sm">No meals logged for today yet.</p>
     </div>
   </div>
 </div>
