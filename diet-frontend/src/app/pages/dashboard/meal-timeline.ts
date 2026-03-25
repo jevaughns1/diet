@@ -1,26 +1,54 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, Utensils, Clock } from 'lucide-angular';
-
-interface MealEntry {
-  id: string;
-  time: string;
-  mealType: string;
-  items: string[];
-  tags: { text: string; color: string }[];
-}
+import { LogMealFormComponent } from './log.component';
+import { MealDetailModalComponent } from './meal-detail-modal.component';
 
 @Component({
   selector: 'app-meal-timeline',
   standalone: true,
   templateUrl: './meal-timeline.html',
   styleUrls: ['./meal-timeline.scss'],
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, LogMealFormComponent, MealDetailModalComponent],
 })
 export class MealTimelineComponent {
   // Initializing with an empty array prevents the template from trying to loop over undefined
   @Input() meals: MealEntry[] = [];
+  @Input() userId: string = '';
+
+  @Output() refreshRequest = new EventEmitter<void>(); // Add an output to talk to Dashboard
+
+  onMealDeleted() {
+    this.refreshRequest.emit();
+  }
 
   readonly UtensilsIcon = Utensils;
   readonly ClockIcon = Clock;
+
+  showLogMealForm = false;
+  editMeal: any = null;
+  selectedMeal: any = null;
+
+  addMeal() {
+    this.editMeal = null;
+    this.showLogMealForm = true;
+  }
+
+  onMealLogged(res: any) {
+    this.showLogMealForm = false;
+    this.editMeal = null;
+  }
+
+  openMealDetail(meal: any) {
+    this.selectedMeal = meal;
+  }
+  closeMealDetail() {
+    this.selectedMeal = null;
+  }
+
+  onEditMeal(meal: any) {
+    this.selectedMeal = null;
+    this.editMeal = meal;
+    this.showLogMealForm = true;
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -22,7 +22,9 @@ import { LucideAngularModule, X, Plus, Trash2 } from 'lucide-angular';
           <lucide-icon [name]="XIcon" class="w-6 h-6"></lucide-icon>
         </button>
 
-        <h2 class="text-2xl font-bold mb-2 text-gray-800">Log Meal</h2>
+        <h2 class="text-2xl font-bold mb-2 text-gray-800">
+          {{ editMeal ? 'Edit Meal' : 'Log Meal' }}
+        </h2>
         <p class="text-sm text-gray-500 mb-6">Record your nutrition for this entry.</p>
 
         <form
@@ -108,7 +110,7 @@ import { LucideAngularModule, X, Plus, Trash2 } from 'lucide-angular';
               class="flex-1 bg-mint-500 hover:bg-mint-600 text-white font-bold py-3 rounded-xl shadow-lg shadow-mint-100 transition-all disabled:opacity-50"
               [disabled]="form.invalid || submitting"
             >
-              {{ submitting ? 'Logging...' : 'Log Meal' }}
+              {{ submitting ? 'Logging...' : editMeal ? 'Update Meal' : 'Log Meal' }}
             </button>
             <button
               type="button"
@@ -130,8 +132,9 @@ import { LucideAngularModule, X, Plus, Trash2 } from 'lucide-angular';
     </div>
   `,
 })
-export class LogMealFormComponent {
+export class LogMealFormComponent implements OnInit {
   @Input() userId!: string;
+  @Input() editMeal: any = null; // Passed from Timeline
   @Output() close = new EventEmitter<void>();
   @Output() submitted = new EventEmitter<any>();
 
@@ -148,8 +151,28 @@ export class LogMealFormComponent {
     private http: HttpClient,
   ) {
     this.form = this.fb.group({
-      foodItems: this.fb.array([this.createFoodItem()]),
+      foodItems: this.fb.array([]),
     });
+  }
+
+  ngOnInit() {
+    // If we have edit data, map it to the form
+    if (this.editMeal && this.editMeal.items && this.editMeal.items.length > 0) {
+      this.editMeal.items.forEach((item: any) => {
+        this.foodItems.push(
+          this.fb.group({
+            name: [item.name, Validators.required],
+            calories: [item.calories || 0, [Validators.required, Validators.min(0)]],
+            carbs: [item.carbs || 0, [Validators.required, Validators.min(0)]],
+            protein: [item.protein || 0, [Validators.required, Validators.min(0)]],
+            fat: [item.fat || 0, [Validators.required, Validators.min(0)]],
+          }),
+        );
+      });
+    } else {
+      // Default behavior for new meal
+      this.addFood();
+    }
   }
 
   createFoodItem() {
@@ -175,20 +198,51 @@ export class LogMealFormComponent {
   }
 
   submit() {
-    if (this.form.invalid || !this.userId) return;
+    if (this.form.invalid || !this.userId || this.submitting) return;
     this.submitting = true;
-    this.http
-      .post(`/daily-log/log-meal?userId=${this.userId}`, this.form.value.foodItems)
-      .subscribe({
+    this.feedback = '';
+
+    const isEdit = !!(this.editMeal && this.editMeal.id);
+    if (isEdit) {
+      const payload = {
+        logId: this.editMeal.id,
+        foodItems: this.form.value.foodItems,
+        mealType: this.editMeal.mealType,
+        time: this.editMeal.time,
+      };
+      this.http.put('/daily-log/edit-log', payload, { responseType: 'text' }).subscribe({
         next: (res: any) => {
-          this.feedback = 'Meal logged successfully!';
+          this.feedback = 'Meal updated successfully!';
           this.submitting = false;
-          setTimeout(() => this.submitted.emit(res), 800);
+          setTimeout(() => {
+            this.submitted.emit(res);
+          }, 800);
         },
-        error: () => {
-          this.feedback = 'Failed to log meal.';
+        error: (err) => {
+          console.error('Submit Error:', err);
+          this.feedback = 'Failed to save meal.';
           this.submitting = false;
         },
       });
+    } else {
+      this.http
+        .post(`/daily-log/log-meal?userId=${this.userId}`, this.form.value.foodItems, {
+          responseType: 'text',
+        })
+        .subscribe({
+          next: (res: any) => {
+            this.feedback = 'Meal logged successfully!';
+            this.submitting = false;
+            setTimeout(() => {
+              this.submitted.emit(res);
+            }, 800);
+          },
+          error: (err) => {
+            console.error('Submit Error:', err);
+            this.feedback = 'Failed to save meal.';
+            this.submitting = false;
+          },
+        });
+    }
   }
 }
