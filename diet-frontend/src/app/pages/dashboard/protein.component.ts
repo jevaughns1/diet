@@ -1,8 +1,10 @@
 import { Component, Input } from '@angular/core';
+import { LogMealFormComponent } from './log.component';
 
 @Component({
   selector: 'app-protein-gauge',
   standalone: true,
+
   template: `
     <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
       <h3 class="text-lg font-semibold text-gray-800 mb-6">Daily Protein Goal</h3>

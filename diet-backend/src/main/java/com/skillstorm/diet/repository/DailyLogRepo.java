@@ -8,4 +8,6 @@ import com.skillstorm.diet.model.DailyLog;
 
 public interface DailyLogRepo extends MongoRepository<DailyLog, String> {
     List<DailyLog> findByUserId(String userId);
+
+    public void deleteByPublicId(String logId);
 }
