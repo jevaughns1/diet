@@ -1,3 +1,4 @@
+
 package com.skillstorm.diet.service;
 
 import java.util.List;
@@ -16,6 +17,18 @@ public class UserService {
 
     public UserService(UserRepo userRepo) {
         this.userRepo = userRepo;
+    }
+
+    public UserDto loginAndGetUser(String userName, String password) {
+        User user = findByUserName(userName);
+        if (user == null || !user.getPassword().equals(password)) {
+            return null;
+        }
+        UserDto userDto = new UserDto();
+        userDto.setUserName(user.getUserName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPublicID(user.getPublicId());
+        return userDto;
     }
 
     public boolean login(String userName, String password) {

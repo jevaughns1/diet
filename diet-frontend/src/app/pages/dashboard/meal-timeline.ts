@@ -34,9 +34,10 @@ export class MealTimelineComponent {
     this.showLogMealForm = true;
   }
 
-  onMealLogged(res: any) {
+  onMealLogged() {
     this.showLogMealForm = false;
     this.editMeal = null;
+    this.refreshRequest.emit();
   }
 
   openMealDetail(meal: any) {

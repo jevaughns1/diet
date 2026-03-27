@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from './sidebar';
 import { CalorieCardComponent } from './calorie.component';
-import { HeaderComponent } from './header';
+
 import { MealTimelineComponent } from './meal-timeline';
 import { ProteinGaugeComponent } from './protein.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +15,7 @@ import { ProteinGaugeComponent } from './protein.component';
   imports: [
     CommonModule,
     FormsModule,
-    HeaderComponent,
+
     SidebarComponent,
     MealTimelineComponent,
     CalorieCardComponent,
@@ -27,8 +28,6 @@ import { ProteinGaugeComponent } from './protein.component';
       ></app-sidebar>
 
       <main class="flex-1 lg:ml-64 flex flex-col">
-        <app-header [user]="user"></app-header>
-
         <div class="p-6 lg:p-10 max-w-7xl mx-auto w-full space-y-8">
           <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             <app-calorie-card [status]="dailyStatus"></app-calorie-card>
@@ -66,7 +65,7 @@ import { ProteinGaugeComponent } from './protein.component';
   `,
 })
 export class DashboardComponent implements OnInit {
-  userId: string = '158f53e0-e842-4eea-891c-1fca91fae2e1';
+  userId: string = '';
   user: any = null;
   mealLogs: any[] = [];
 
@@ -81,10 +80,20 @@ export class DashboardComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
-    this.refreshAllData();
+    // Get user from localStorage
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      this.userId = user.publicID || user.publicId || user.id;
+      this.user = user;
+      this.refreshAllData();
+    } else {
+      this.router.navigateByUrl('/signin');
+    }
   }
 
   refreshAllData(): void {

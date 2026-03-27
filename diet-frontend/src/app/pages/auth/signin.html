@@ -1,13 +1,13 @@
 <div class="auth-card">
   <h2 class="auth-title">Sign In</h2>
   <form style="display: flex; flex-direction: column; gap: 1rem" (ngSubmit)="signin()" novalidate>
-    <label>Email</label>
+    <label>Username</label>
     <input
-      type="email"
-      [(ngModel)]="credentials.email"
-      name="email"
+      type="text"
+      [(ngModel)]="credentials.userName"
+      name="userName"
       required
-      placeholder="Enter your email"
+      placeholder="Enter your username"
     />
     <label>Password</label>
     <input

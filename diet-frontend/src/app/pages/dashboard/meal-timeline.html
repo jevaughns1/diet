@@ -3,7 +3,7 @@
     <h3 class="text-lg font-semibold text-gray-800 mb-6">Today's Meals</h3>
     <button
       (click)="addMeal()"
-      class="ml-auto bg-mint-500 text-white px-4 py-2 rounded-lg hover:bg-mint-600 transition-colors"
+      class="ml-auto bg-mint-400 hover:bg-mint-500 text-white px-4 py-2 rounded-lg hover:bg-mint-600 transition-colors mb-5"
     >
       Add Meal
     </button>
@@ -66,7 +66,7 @@
   [userId]="userId"
   [editMeal]="editMeal"
   (close)="showLogMealForm = false; editMeal = null"
-  (submitted)="onMealLogged($event)"
+  (submitted)="onMealLogged()"
 ></app-log-meal-form>
 
 <app-meal-detail-modal
