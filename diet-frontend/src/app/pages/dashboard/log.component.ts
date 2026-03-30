@@ -228,7 +228,7 @@ export class LogMealFormComponent implements OnInit {
   readonly SearchIcon = Search;
   readonly LoaderIcon = Loader2;
 
-  private readonly USDA_KEY = 'DEMO_KEY';
+  private readonly USDA_KEY = 'Fi1fpqVPUtcoP13p18E27BoB28vi7fKuQEMV1kIm';
 
   form: any;
   searchControl = new FormControl('');
@@ -267,6 +267,7 @@ export class LogMealFormComponent implements OnInit {
     this.cdr.detectChanges(); // Update UI to show loading state
 
     const url = `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${this.USDA_KEY}`;
+
     const body = {
       query: query,
       pageSize: 15,

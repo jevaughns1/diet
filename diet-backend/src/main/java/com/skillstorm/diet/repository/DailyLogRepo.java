@@ -1,5 +1,6 @@
 package com.skillstorm.diet.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -10,4 +11,6 @@ public interface DailyLogRepo extends MongoRepository<DailyLog, String> {
     List<DailyLog> findByUserId(String userId);
 
     public void deleteByPublicId(String logId);
+
+    List<DailyLog> findByUserIdAndDateBetween(String userId, Date start, Date end);
 }

@@ -1,6 +1,7 @@
 
 package com.skillstorm.diet.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -51,5 +52,23 @@ public class DailyLogService {
         // log.setMealType(mealType);
         // log.setTime(time);
         return dailyLogRepo.save(log);
+    }
+
+    public List<DailyLog> getTodayLogsForUser(String userId) {
+        Calendar cal = Calendar
+                .getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        Date startOfDay = cal.getTime();
+
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        Date endOfDay = cal.getTime();
+
+        // Use a custom repo method to fetch only within this range
+        List<DailyLog> logs = dailyLogRepo.findByUserIdAndDateBetween(userId, startOfDay, endOfDay);
+        return logs;
     }
 }

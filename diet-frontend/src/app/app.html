@@ -26,43 +26,49 @@
     >
   </div>
 </nav>
-
 <header
   *ngIf="user()"
-  class="h-16 border-b border-gray-200 bg-white px-6 flex items-center justify-between fixed top-0 left-0 right-0 z-30 shadow-sm"
+  class="h-16 border-b border-gray-200 bg-white px-8 flex items-center justify-between fixed top-0 left-0 right-0 z-30 shadow-sm"
 >
-  <div class="hidden md:flex items-center relative w-96">
-    <lucide-icon [name]="SearchIcon" class="w-4 h-4 absolute left-3 text-gray-400"></lucide-icon>
-    <input
-      type="text"
-      placeholder="Search nutrition data..."
-      class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-mint-500/20 focus:border-mint-500 transition-all"
-    />
+  <div class="flex items-center gap-2">
+    <div class="w-8 h-8 rounded-lg bg-mint-600 flex items-center justify-center lg:hidden">
+      <span class="text-white text-xs font-bold">DS</span>
+    </div>
+    <h1 class="text-lg font-bold text-gray-800 tracking-tight hidden sm:block">Overview</h1>
   </div>
 
-  <div class="flex items-center gap-4">
-    <button class="p-2 text-gray-500 hover:bg-gray-100 rounded-lg relative transition-colors">
+  <div class="flex items-center gap-3">
+    <button
+      class="p-2 text-gray-500 hover:bg-gray-50 rounded-xl relative transition-all active:scale-95"
+    >
       <lucide-icon [name]="BellIcon" class="w-5 h-5"></lucide-icon>
       <span
-        class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"
+        class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"
       ></span>
     </button>
-    <div class="h-8 w-px bg-gray-200 mx-2"></div>
-    <div class="flex items-center gap-3 group">
+
+    <div class="h-6 w-px bg-gray-200 mx-1"></div>
+
+    <div class="flex items-center gap-3 pl-1">
       <div class="text-right hidden sm:block">
-        <p class="text-sm font-bold text-gray-800 leading-none mb-1">{{ user()?.userName }}</p>
-        <p class="text-[10px] font-medium text-mint-600 uppercase tracking-wider">
-          {{ user()?.plan || 'Free Plan' }}
-        </p>
+        <p class="text-sm font-bold text-gray-900 leading-tight">{{ user()?.userName }}</p>
+        <div class="flex items-center justify-end gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-mint-500"></span>
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+            {{ user()?.plan || 'Free' }}
+          </p>
+        </div>
       </div>
+
       <div
-        class="w-9 h-9 rounded-lg bg-gradient-to-br from-mint-500 to-mint-600 flex items-center justify-center text-white font-bold shadow-sm shadow-mint-100"
+        class="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-gray-200 border border-gray-800"
       >
         {{ initials() }}
       </div>
+
       <button
         (click)="logout()"
-        class="ml-2 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+        class="ml-1 p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
         title="Logout"
       >
         <lucide-icon [name]="LogOutIcon" class="w-4 h-4"></lucide-icon>

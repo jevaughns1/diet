@@ -10,5 +10,9 @@ public class UserDto {
     private String email;
 
     private String publicID;
+    private double proteinTarget;
+    private double carbTarget;
+    private double fatTarget;
+    private double calorieTarget;
 
 }

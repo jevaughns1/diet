@@ -1,0 +1,56 @@
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h3 class="text-lg font-bold text-gray-800 tracking-tight">Consistency</h3>
+      <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
+        Goal Completion History
+      </p>
+    </div>
+    <div class="flex items-center gap-2 bg-mint-50 px-3 py-1.5 rounded-xl border border-mint-100">
+      <lucide-icon [name]="CheckIcon" class="w-4 h-4 text-mint-600"></lucide-icon>
+      <span class="text-xs font-bold text-mint-700">{{ streak() }} Day Streak</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-7 gap-2">
+    <div *ngFor="let day of days()" class="group relative">
+      <div
+        [class]="
+          'aspect-square rounded-lg border transition-all duration-300 hover:scale-110 cursor-default ' +
+          getStatusClass(day.status)
+        "
+      ></div>
+
+      <div
+        class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50"
+      >
+        <div
+          class="bg-gray-900 text-white text-[10px] py-1.5 px-3 rounded-lg whitespace-nowrap shadow-2xl"
+        >
+          <p class="font-bold">{{ day.date | date: 'EEEE, MMM d' }}</p>
+          <p class="opacity-80">{{ day.calories }} kcal logged</p>
+          <div
+            class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 flex items-center justify-between">
+    <div class="flex gap-3">
+      <div class="flex items-center gap-1">
+        <div class="w-2 h-2 rounded-full bg-mint-500"></div>
+        <span class="text-[9px] font-bold text-gray-400 uppercase">Met</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <div class="w-2 h-2 rounded-full bg-orange-400"></div>
+        <span class="text-[9px] font-bold text-gray-400 uppercase">Close</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+        <span class="text-[9px] font-bold text-gray-400 uppercase">None</span>
+      </div>
+    </div>
+  </div>
+</div>

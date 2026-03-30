@@ -63,6 +63,10 @@ public class UserService {
         userDto.setUserName(user.getUserName());
         userDto.setEmail(user.getEmail());
         userDto.setPublicID(user.getPublicId());
+        userDto.setProteinTarget(user.getProteinTarget());
+        userDto.setCarbTarget(user.getCarbTarget());
+        userDto.setFatTarget(user.getFatTarget());
+        userDto.setCalorieTarget(user.getCalorieTarget());
         return userDto;
     }
 

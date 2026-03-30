@@ -48,4 +48,11 @@ public class DailyLogController {
         List<DailyLog> logs = dailyLogService.getLogsForUser(userId);
         return ResponseEntity.ok(logs);
     }
+
+    @GetMapping("/user-logs/today")
+    public ResponseEntity<List<DailyLog>> getTodayUserLogs(@RequestParam String userId) {
+        // Get start and end of "today" in the server's timezone
+        List<DailyLog> logs = dailyLogService.getTodayLogsForUser(userId);
+        return ResponseEntity.ok(logs);
+    }
 }
