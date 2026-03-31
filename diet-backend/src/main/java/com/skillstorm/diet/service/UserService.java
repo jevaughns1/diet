@@ -2,8 +2,10 @@
 package com.skillstorm.diet.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import com.skillstorm.diet.Dto.UserDto;
@@ -102,4 +104,43 @@ public class UserService {
         return userDto;
     }
 
+    public User oauth2UserToUser(OAuth2User principal) {
+        Map<String, Object> attributes = principal.getAttributes();
+        String id = parseAttributes(attributes, "sub", "id");
+
+        return userRepo.findByProviderId(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public String principalToUserId(OAuth2User principal) {
+        return oauth2UserToUser(principal).getProviderId();
+    }
+
+    public String parseAttributes(Map<String, Object> map, String... keys) {
+        for (String key : keys) {
+            if (map.containsKey(key) && map.get(key) != null) {
+                return map.get(key).toString();
+            }
+        }
+        return null;
+    }
+
+    public User findOrCreateUser(User.Provider provider, String providerId, String email, String firstName,
+            String lastName, String avatar) {
+        return userRepo
+                .findByProviderId(providerId)
+                .orElseGet(() -> {
+                    User newUser = User.builder()
+                            .providerId(providerId)
+                            .email(email)
+                            .firstName(firstName)
+                            .lastName(lastName)
+                            .avatarUrl(avatar)
+                            .role(User.UserRole.GUEST)
+                            .enabled(true)
+                            .build();
+
+                    return userRepo.save(newUser);
+                });
+    }
 }
