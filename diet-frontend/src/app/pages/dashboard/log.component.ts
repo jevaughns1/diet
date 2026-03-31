@@ -228,7 +228,7 @@ export class LogMealFormComponent implements OnInit {
   readonly SearchIcon = Search;
   readonly LoaderIcon = Loader2;
 
-  private readonly USDA_KEY = 'Fi1fpqVPUtcoP13p18E27BoB28vi7fKuQEMV1kIm';
+  private readonly USDA_KEY = 'DEMO_KEY';
 
   form: any;
   searchControl = new FormControl('');
